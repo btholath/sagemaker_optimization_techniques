@@ -36,7 +36,9 @@ space = [
 result = gp_minimize(objective, space, n_calls=20, random_state=42)
 
 output_file = OUTPUT_DIR / "optimization_result.pkl"
-joblib.dump(result, output_file)
+#joblib.dump(result, output_file)
+joblib.dump(result, output_file, compress=3)
+
 logger.info(f"✅ Bayesian Optimization completed. Result saved to {output_file}")
 logger.info(f"✅ Best RMSE: {result.fun:.4f} with params: {result.x}")
 
