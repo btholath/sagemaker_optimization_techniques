@@ -46,11 +46,13 @@ estimator = Estimator(
     instance_type="ml.m5.xlarge",
     volume_size=5,
     max_run=300,
-    output_path=output_path,
+    output_path=f"s3://{S3_BUCKET}/output",
     sagemaker_session=sagemaker_session,
     hyperparameters={
         "objective": "reg:squarederror",  # ✅ REQUIRED
-        "num_round": 100                  # ✅ REQUIRED
+        "num_round": 100,                  # ✅ REQUIRED
+        "eval_metric": "rmse",                  # ✅ Important for emitting metric
+        "early_stopping_rounds": 10             # ✅ Needed for validation use
     }
 )
 
@@ -77,4 +79,9 @@ train_input = TrainingInput(
 )
 
 logger.info("🚀 Launching SageMaker Hyperparameter Tuning Job...")
-tuner.fit({"train": train_input})
+#tuner.fit({"train": train_input})
+tuner.fit({
+    "train": TrainingInput("s3://btholath-sagemaker-bucket/data/train", content_type="csv"),
+    "validation": TrainingInput("s3://btholath-sagemaker-bucket/data/validation", content_type="csv")
+})
+
