@@ -20,3 +20,9 @@ python -m bayesian.consumer_spending.sagemaker.sagemaker_bayesian_tuning
 
 # 6. Plot convergence from optimization results
 python -m bayesian.consumer_spending.visualization.plot_convergence
+
+
+# cleanup AWS resources
+python bayesian/resource_setup/delete_resources.py --dry-run
+python bayesian/resource_setup/delete_resources.py
+
